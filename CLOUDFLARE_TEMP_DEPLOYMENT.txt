@@ -1,19 +1,17 @@
 Preparing pnpm@10.14.0 for immediate activation...
 Scope: all 5 workspace projects
+Lockfile is up to date, resolution step is skipped
 Progress: resolved 1, reused 0, downloaded 0, added 0
-Progress: resolved 9, reused 0, downloaded 7, added 0
-Progress: resolved 61, reused 0, downloaded 39, added 0
-Progress: resolved 103, reused 0, downloaded 48, added 0
-Progress: resolved 175, reused 0, downloaded 94, added 0
-Progress: resolved 368, reused 0, downloaded 232, added 0
- WARN  2 deprecated subdependencies found: glob@9.3.5, node-domexception@1.0.0
 Packages: +342
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Progress: resolved 452, reused 0, downloaded 344, added 341
-Progress: resolved 452, reused 0, downloaded 344, added 342, done
+Progress: resolved 342, reused 0, downloaded 18, added 4
+Progress: resolved 342, reused 0, downloaded 70, added 24
+Progress: resolved 342, reused 0, downloaded 267, added 154
+Progress: resolved 342, reused 0, downloaded 322, added 178
+Progress: resolved 342, reused 0, downloaded 342, added 342, done
 
 devDependencies:
-+ typescript 5.9.3 (7.0.2 is available)
++ typescript 5.9.3
 
 ╭ Warning ─────────────────────────────────────────────────────────────────────╮
 │                                                                              │
@@ -23,7 +21,7 @@ devDependencies:
 │                                                                              │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 
-Done in 7.2s using pnpm v10.14.0
+Done in 5.5s using pnpm v10.14.0
 
 > uli-os@0.1.0 test /home/runner/work/uli-os/uli-os
 > npm run build:core && node --test tests/*.test.cjs
@@ -36,67 +34,67 @@ TAP version 13
 # Subtest: vertical slice preserves original event and creates a pending candidate
 ok 1 - vertical slice preserves original event and creates a pending candidate
   ---
-  duration_ms: 1.25699
+  duration_ms: 1.242975
   type: 'test'
   ...
 # Subtest: a model update remains non-final until Uli confirms it
 ok 2 - a model update remains non-final until Uli confirms it
   ---
-  duration_ms: 1.018045
+  duration_ms: 1.065313
   type: 'test'
   ...
 # Subtest: every model requires an explicit boundary
 ok 3 - every model requires an explicit boundary
   ---
-  duration_ms: 0.462101
+  duration_ms: 0.590154
   type: 'test'
   ...
 # Subtest: maturity becomes supported across two contexts
 ok 4 - maturity becomes supported across two contexts
   ---
-  duration_ms: 0.329694
+  duration_ms: 0.446896
   type: 'test'
   ...
 # Subtest: maturity becomes stable across repeated evidence in three contexts
 ok 5 - maturity becomes stable across repeated evidence in three contexts
   ---
-  duration_ms: 0.170848
+  duration_ms: 0.254106
   type: 'test'
   ...
 # Subtest: a strong contradiction moves a stable model under tension
 ok 6 - a strong contradiction moves a stable model under tension
   ---
-  duration_ms: 0.181167
+  duration_ms: 0.316903
   type: 'test'
   ...
 # Subtest: no model update is created when evidence is too weak
 ok 7 - no model update is created when evidence is too weak
   ---
-  duration_ms: 0.241679
+  duration_ms: 0.356517
   type: 'test'
   ...
 # Subtest: SUPPORTS accepts evidence -> model
 ok 8 - SUPPORTS accepts evidence -> model
   ---
-  duration_ms: 1.261257
+  duration_ms: 1.622946
   type: 'test'
   ...
 # Subtest: SUPPORTS rejects event -> place
 ok 9 - SUPPORTS rejects event -> place
   ---
-  duration_ms: 0.155249
+  duration_ms: 0.185106
   type: 'test'
   ...
 # Subtest: AI-created edges require a reasoning record
 ok 10 - AI-created edges require a reasoning record
   ---
-  duration_ms: 0.405375
+  duration_ms: 0.464429
   type: 'test'
   ...
 # Subtest: confirmation-required relationships cannot be AI-confirmed
 ok 11 - confirmation-required relationships cannot be AI-confirmed
   ---
-  duration_ms: 0.320196
+  duration_ms: 0.323555
   type: 'test'
   ...
 1..11
@@ -107,7 +105,7 @@ ok 11 - confirmation-required relationships cannot be AI-confirmed
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 67.686613
+# duration_ms 75.347231
 
 > @uli-os/web@0.1.0 cf:build /home/runner/work/uli-os/uli-os/apps/web
 > opennextjs-cloudflare build
@@ -118,7 +116,111 @@ ok 11 - confirmation-required relationships cannot be AI-confirmed
 └─────────────────────────────┘
 
 Monorepo detected at /home/runner/work/uli-os/uli-os
-ERROR Error: next.config.js not found. Please make sure you are running this command inside a Next.js app.
-/home/runner/work/uli-os/uli-os/apps/web:
- ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @uli-os/web@0.1.0 cf:build: `opennextjs-cloudflare build`
-Exit status 1
+App directory: /home/runner/work/uli-os/uli-os/apps/web
+Next.js version : 16.2.11
+@opennextjs/cloudflare version: 1.20.2
+@opennextjs/aws version: 4.1.0
+workerd compatibility_date: 2026-07-30
+
+┌─────────────────────────────────┐
+│ OpenNext — Building Next.js app │
+└─────────────────────────────────┘
+
+
+> @uli-os/web@0.1.0 build /home/runner/work/uli-os/uli-os/apps/web
+> next build
+
+⚠ No build cache found. Please configure build caching for faster rebuilds. Read more: https://nextjs.org/docs/messages/no-cache
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+▲ Next.js 16.2.11 (Turbopack)
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 2.4s
+  Running TypeScript ...
+
+  We detected TypeScript in your project and created a tsconfig.json file for you.
+  Finished TypeScript in 2.8s ...
+  Collecting page data using 3 workers ...
+  Generating static pages using 3 workers (0/3) ...
+✓ Generating static pages using 3 workers (3/3) in 132ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+└ ○ /_not-found
+
+
+○  (Static)  prerendered as static content
+
+
+┌──────────────────────────────┐
+│ OpenNext — Generating bundle │
+└──────────────────────────────┘
+
+Bundling middleware function...
+Bundling static assets...
+Bundling cache assets...
+Building server function: default...
+Applying code patches: 2.175s
+# copyPackageTemplateFiles
+⚙️ Bundling the OpenNext server...
+
+Worker saved in `.open-next/worker.js` 🚀
+
+OpenNext build complete.
+
+ ⛅️ wrangler 4.116.0
+────────────────────
+OpenNext project detected, calling `opennextjs-cloudflare deploy`
+
+┌──────────────────────────────┐
+│ OpenNext — Cloudflare deploy │
+└──────────────────────────────┘
+
+Monorepo detected at /home/runner/work/uli-os/uli-os
+Incremental cache does not need populating
+Tag cache does not need populating
+
+ ⛅️ wrangler 4.116.0
+────────────────────
+
+Cloudflare collects anonymous telemetry about your usage of Wrangler. Learn more at https://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler/telemetry.md
+Continuing means you accept Cloudflare's Terms of Service (https://www.cloudflare.com/terms/) and Privacy Policy (https://www.cloudflare.com/privacypolicy/).
+Solving proof-of-work challenge…
+Temporary account ready:
+	Account: Superficial Snout (created)
+	Claim within: 60 minutes
+	Claim URL: https://dash.cloudflare.com/claim-preview?claimToken=lXUlQZAkiAlRhWMPIb9-8KDdrbxAxrfuuDq9t5F0Yko
+🌀 Building list of assets...
+✨ Read 15 files from the assets directory /home/runner/work/uli-os/uli-os/apps/web/.open-next/assets
+🌀 Starting asset upload...
+🌀 Found 10 new or modified static assets to upload. Proceeding with upload...
++ /BUILD_ID
++ /_next/static/i2_rq6e_9gZe-m3dmqxKA/_buildManifest.js
++ /_next/static/chunks/0-v7vr566fqht.js
++ /_next/static/chunks/1j_awki_td03s.js
++ /_next/static/i2_rq6e_9gZe-m3dmqxKA/_ssgManifest.js
++ /_next/static/chunks/turbopack-3030-9wt0jf4b.js
++ /_next/static/chunks/0cz1d0mv5g_q7.js
++ /_next/static/i2_rq6e_9gZe-m3dmqxKA/_clientMiddlewareManifest.js
++ /_next/static/chunks/3fq1mjqo3uks1.js
++ /_next/static/chunks/43fajpu7058tx.js
+Uploaded 4 of 10 assets
+Uploaded 7 of 10 assets
+Uploaded 10 of 10 assets
+✨ Success! Uploaded 10 files (1.53 sec)
+
+Total Upload: 3722.65 KiB / gzip: 769.75 KiB
+Worker Startup Time: 29 ms
+Your Worker has access to the following bindings:
+Binding            Resource      
+env.ASSETS         Assets        
+
+Uploaded uli-os-web (8.88 sec)
+Deployed uli-os-web triggers (1.33 sec)
+  https://uli-os-web.superficial-snout.workers.dev
+Current Version ID: 184b323f-3ba9-4c44-82dc-1a06eff1812c
