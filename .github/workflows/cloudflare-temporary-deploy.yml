@@ -28,19 +28,29 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Deploy temporary Cloudflare preview
+      - name: Install, test, build, and deploy
         id: deploy
         shell: bash
         run: |
           set -uo pipefail
-          cd apps/web
           set +e
-          printf 'y\n' | npx --yes wrangler@latest deploy --temporary 2>&1 | tee /tmp/cloudflare-deploy.txt
-          deploy_exit=${PIPESTATUS[1]}
+          bash -o pipefail -c '
+            set -euo pipefail
+            corepack enable
+            corepack prepare pnpm@10.14.0 --activate
+            pnpm install --no-frozen-lockfile
+            pnpm test
+            pnpm --filter @uli-os/web cf:build
+            cd apps/web
+            pnpm exec wrangler deploy --temporary
+          ' 2>&1 | tee /tmp/cloudflare-deploy.raw.txt
+          deploy_exit=${PIPESTATUS[0]}
           set -e
-          cd ../..
 
-          cp /tmp/cloudflare-deploy.txt CLOUDFLARE_TEMP_DEPLOYMENT.txt
+          sed -E 's/\x1B\[[0-9;]*[mK]//g' /tmp/cloudflare-deploy.raw.txt > CLOUDFLARE_TEMP_DEPLOYMENT.txt
+          deployment_url=$(grep -Eo 'https://[^[:space:]]+workers\.dev[^[:space:]]*' CLOUDFLARE_TEMP_DEPLOYMENT.txt | tail -1 || true)
+          claim_url=$(grep -Eo 'https://dash\.cloudflare\.com/[^[:space:]]+' CLOUDFLARE_TEMP_DEPLOYMENT.txt | tail -1 || true)
+
           {
             echo "# Cloudflare Temporary Deployment Evidence"
             echo
@@ -48,13 +58,15 @@ jobs:
             echo "- Workflow run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
             echo "- Exit code: ${deploy_exit}"
             echo "- Generated at: $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+            if [ -n "$deployment_url" ]; then echo "- Deployment URL: ${deployment_url}"; fi
+            if [ -n "$claim_url" ]; then echo "- Claim URL: ${claim_url}"; fi
             echo
             echo "The raw command output is stored in \`CLOUDFLARE_TEMP_DEPLOYMENT.txt\`."
           } > CLOUDFLARE_TEMP_DEPLOYMENT.md
 
           echo "deploy_exit=${deploy_exit}" >> "$GITHUB_OUTPUT"
 
-      - name: Commit deployment evidence and generated config
+      - name: Commit lockfile and deployment evidence
         shell: bash
         run: |
           set -euo pipefail
