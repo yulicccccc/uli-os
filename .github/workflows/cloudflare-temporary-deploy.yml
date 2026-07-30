@@ -35,12 +35,12 @@ jobs:
           set -uo pipefail
           cd apps/web
           set +e
-          npx --yes wrangler@latest deploy --temporary --yes 2>&1 | tee /tmp/cloudflare-deploy.log
-          deploy_exit=${PIPESTATUS[0]}
+          printf 'y\n' | npx --yes wrangler@latest deploy --temporary 2>&1 | tee /tmp/cloudflare-deploy.txt
+          deploy_exit=${PIPESTATUS[1]}
           set -e
           cd ../..
 
-          cp /tmp/cloudflare-deploy.log CLOUDFLARE_TEMP_DEPLOYMENT.log
+          cp /tmp/cloudflare-deploy.txt CLOUDFLARE_TEMP_DEPLOYMENT.txt
           {
             echo "# Cloudflare Temporary Deployment Evidence"
             echo
@@ -49,7 +49,7 @@ jobs:
             echo "- Exit code: ${deploy_exit}"
             echo "- Generated at: $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
             echo
-            echo "The raw command output is stored in \`CLOUDFLARE_TEMP_DEPLOYMENT.log\`."
+            echo "The raw command output is stored in \`CLOUDFLARE_TEMP_DEPLOYMENT.txt\`."
           } > CLOUDFLARE_TEMP_DEPLOYMENT.md
 
           echo "deploy_exit=${deploy_exit}" >> "$GITHUB_OUTPUT"
@@ -72,5 +72,5 @@ jobs:
         if: steps.deploy.outputs.deploy_exit != '0'
         shell: bash
         run: |
-          echo "Cloudflare temporary deployment failed. See CLOUDFLARE_TEMP_DEPLOYMENT.log in the repository."
+          echo "Cloudflare temporary deployment failed. See CLOUDFLARE_TEMP_DEPLOYMENT.txt in the repository."
           exit 1
