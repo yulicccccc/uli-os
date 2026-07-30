@@ -1,0 +1,87 @@
+name: Cloudflare One-Time Claim
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/cloudflare-claim-once.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  claim:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install, test, and build
+        shell: bash
+        run: |
+          set -euo pipefail
+          corepack enable
+          corepack prepare pnpm@10.14.0 --activate
+          pnpm install --frozen-lockfile
+          pnpm test
+          pnpm --filter @uli-os/web cf:build
+
+      - name: Create temporary deployment without exposing claim URL
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd apps/web
+          pnpm exec wrangler deploy --temporary > /tmp/cloudflare-claim-raw.txt 2>&1
+          cd ../..
+
+          claim_url=$(grep -Eo 'https://dash\.cloudflare\.com/claim-preview\?claimToken=[^[:space:]]+' /tmp/cloudflare-claim-raw.txt | tail -1)
+          deployment_url=$(grep -Eo 'https://[^[:space:]]+\.workers\.dev' /tmp/cloudflare-claim-raw.txt | tail -1)
+
+          test -n "$claim_url"
+          test -n "$deployment_url"
+
+          printf '%s' "$claim_url" > /tmp/claim-url.txt
+
+          cat > /tmp/claim-public.pem <<'PUBLIC_KEY'
+          -----BEGIN PUBLIC KEY-----
+          MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0yoKbxHyyNYYdsL14WJA
+          kr/VQzBcGR8KiqwXU7PsqqUnZIgZ7kX+UQ8xVDBtd8vggl1kteOCvlHiukr9tJqj
+          j0bVOU6M0tfDgBu3di6sCJPJO422Z+kquL0/6WC6JxoSOJtw4TJrbBVMsLp26bQs
+          Mq0YyeXCZtBDIQ/D4ql+k4YrrPU18fpvddyfnn66bBiTrSbWx2yjv2fGt+s6MMCN
+          1dHrUlzBS1QDowBZm/FOU+it1EkWi0guj1wu6/q78Z+89EKtOIDRzsvIiN6IDnNI
+          2Vz1e4cajUEPm1ybioA6bAJprzStcg/Ls9pxvC1KZKv9CwmnaUEUNylgwQ2nhxCe
+          UwIDAQAB
+          -----END PUBLIC KEY-----
+          PUBLIC_KEY
+
+          openssl pkeyutl -encrypt -pubin -inkey /tmp/claim-public.pem -in /tmp/claim-url.txt -out /tmp/claim-url.bin
+          base64 -w 0 /tmp/claim-url.bin > CLOUDFLARE_CLAIM_ENCRYPTED.txt
+
+          {
+            echo "# Cloudflare One-Time Claim Evidence"
+            echo
+            echo "- Commit: ${GITHUB_SHA}"
+            echo "- Generated at: $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+            echo "- Deployment URL: ${deployment_url}"
+            echo "- Claim URL: encrypted with an ephemeral RSA public key"
+            echo "- Claim window: 60 minutes"
+          } > CLOUDFLARE_CLAIM_STATUS.md
+
+      - name: Commit encrypted claim package
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add CLOUDFLARE_CLAIM_ENCRYPTED.txt CLOUDFLARE_CLAIM_STATUS.md
+          git commit -m "deploy: record encrypted one-time Cloudflare claim package"
+          git push origin HEAD:main
