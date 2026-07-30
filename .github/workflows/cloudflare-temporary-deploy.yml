@@ -1,4 +1,4 @@
-name: Cloudflare Temporary Deploy
+name: Cloudflare Build Verification
 
 on:
   push:
@@ -6,18 +6,22 @@ on:
     paths:
       - ".github/workflows/cloudflare-temporary-deploy.yml"
       - "apps/web/**"
+      - "packages/**"
+      - "tests/**"
       - "package.json"
+      - "pnpm-lock.yaml"
       - "pnpm-workspace.yaml"
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  deploy:
-    if: github.actor != 'github-actions[bot]'
+  verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
 
     steps:
       - name: Checkout repository
@@ -28,87 +32,30 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Install, test, build, deploy, and smoke test
-        id: deploy
-        shell: bash
-        run: |
-          set -uo pipefail
-          set +e
-          bash -o pipefail -c '
-            set -euo pipefail
-            corepack enable
-            corepack prepare pnpm@10.14.0 --activate
-            pnpm install --no-frozen-lockfile
-            pnpm test
-            pnpm --filter @uli-os/web cf:build
-            cd apps/web
-            pnpm exec wrangler deploy --temporary
-          ' 2>&1 | tee /tmp/cloudflare-deploy.raw.txt
-          deploy_exit=${PIPESTATUS[0]}
-          set -e
-
-          sed -E 's/\x1B\[[0-9;]*[mK]//g' /tmp/cloudflare-deploy.raw.txt > CLOUDFLARE_TEMP_DEPLOYMENT.txt
-          deployment_url=$(grep -Eo 'https://[^[:space:]]+workers\.dev[^[:space:]]*' CLOUDFLARE_TEMP_DEPLOYMENT.txt | tail -1 || true)
-          claim_url=$(grep -Eo 'https://dash\.cloudflare\.com/[^[:space:]]+' CLOUDFLARE_TEMP_DEPLOYMENT.txt | tail -1 || true)
-
-          smoke_exit=1
-          smoke_status="not-run"
-          smoke_body_marker="missing"
-
-          if [ "$deploy_exit" -eq 0 ] && [ -n "$deployment_url" ]; then
-            for attempt in 1 2 3 4 5 6 7 8 9 10; do
-              smoke_status=$(curl --silent --show-error --location --output /tmp/uli-os-smoke.html --write-out '%{http_code}' "$deployment_url" || true)
-              if [ "$smoke_status" = "200" ] && grep --quiet "Uli OS" /tmp/uli-os-smoke.html; then
-                smoke_exit=0
-                smoke_body_marker="present"
-                break
-              fi
-              sleep 3
-            done
-          fi
-
-          if [ "$deploy_exit" -ne 0 ]; then
-            overall_exit=$deploy_exit
-          else
-            overall_exit=$smoke_exit
-          fi
-
-          {
-            echo "# Cloudflare Temporary Deployment Evidence"
-            echo
-            echo "- Commit: ${GITHUB_SHA}"
-            echo "- Workflow run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-            echo "- Deploy exit code: ${deploy_exit}"
-            echo "- Smoke-test exit code: ${smoke_exit}"
-            echo "- HTTP status: ${smoke_status}"
-            echo "- Expected body marker: ${smoke_body_marker}"
-            echo "- Overall exit code: ${overall_exit}"
-            echo "- Generated at: $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
-            if [ -n "$deployment_url" ]; then echo "- Deployment URL: ${deployment_url}"; fi
-            if [ -n "$claim_url" ]; then echo "- Claim URL: ${claim_url}"; fi
-            echo
-            echo "The raw build and deployment output is stored in \`CLOUDFLARE_TEMP_DEPLOYMENT.txt\`."
-          } > CLOUDFLARE_TEMP_DEPLOYMENT.md
-
-          echo "overall_exit=${overall_exit}" >> "$GITHUB_OUTPUT"
-
-      - name: Commit lockfile and deployment evidence
+      - name: Install dependencies
         shell: bash
         run: |
           set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          if git diff --cached --quiet; then
-            echo "No generated files or evidence to commit."
-          else
-            git commit -m "deploy: record Cloudflare temporary deployment evidence"
-            git push origin HEAD:main
-          fi
+          corepack enable
+          corepack prepare pnpm@10.14.0 --activate
+          pnpm install --frozen-lockfile
 
-      - name: Fail if deployment or smoke test failed
-        if: steps.deploy.outputs.overall_exit != '0'
+      - name: Run Cognitive Core regression tests
+        run: pnpm test
+
+      - name: Build Cloudflare Worker through OpenNext
+        run: pnpm --filter @uli-os/web cf:build
+
+      - name: Record verification summary
         shell: bash
         run: |
-          echo "Cloudflare verification failed. See CLOUDFLARE_TEMP_DEPLOYMENT.md and .txt in the repository."
-          exit 1
+          {
+            echo "## Cloudflare build verification"
+            echo
+            echo "- Cognitive Core tests: passed"
+            echo "- Next.js production build: passed"
+            echo "- OpenNext Worker bundle: passed"
+            echo "- Commit: ${GITHUB_SHA}"
+            echo
+            echo "Deployment is intentionally excluded from this public workflow because Cloudflare temporary claim URLs are bearer credentials."
+          } >> "$GITHUB_STEP_SUMMARY"
