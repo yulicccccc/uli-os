@@ -1,0 +1,101 @@
+openapi: 3.1.0
+info:
+  title: Uli OS Cognitive Core API
+  version: 0.1.0
+paths:
+  /api/v1/captures:
+    post:
+      summary: Capture an immutable event
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [rawContent, occurredAt]
+              properties:
+                rawContent: { type: string, minLength: 1 }
+                occurredAt: { type: string, format: date-time }
+      responses:
+        "201": { description: Event created }
+  /api/v1/captures/{captureId}/reasoning-runs:
+    post:
+      summary: Run the versioned reasoning pipeline
+      parameters:
+        - in: path
+          name: captureId
+          required: true
+          schema: { type: string, format: uuid }
+        - in: header
+          name: Idempotency-Key
+          required: true
+          schema: { type: string }
+      responses:
+        "201": { description: Reasoning Record and proposals created }
+  /api/v1/model-update-candidates/{candidateId}/decision:
+    post:
+      summary: Apply Uli's explicit decision
+      parameters:
+        - in: path
+          name: candidateId
+          required: true
+          schema: { type: string, format: uuid }
+        - in: header
+          name: Idempotency-Key
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - type: object
+                  required: [action]
+                  properties:
+                    action: { const: confirm }
+                    finalStatement: { type: string }
+                - type: object
+                  required: [action, finalStatement]
+                  properties:
+                    action: { const: modify_and_confirm }
+                    finalStatement: { type: string, minLength: 1 }
+                - type: object
+                  required: [action]
+                  properties:
+                    action: { const: continue_observing }
+                - type: object
+                  required: [action]
+                  properties:
+                    action: { const: reject }
+                    reason: { type: string }
+      responses:
+        "200": { description: Candidate state updated }
+  /api/v1/models/{modelId}:
+    get:
+      summary: Retrieve a model, boundary, maturity explanation, and evidence ledger
+      parameters:
+        - in: path
+          name: modelId
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "200": { description: Model detail }
+  /api/v1/graph/neighborhood/{nodeId}:
+    get:
+      summary: Retrieve a bounded graph neighborhood
+      parameters:
+        - in: path
+          name: nodeId
+          required: true
+          schema: { type: string, format: uuid }
+        - in: query
+          name: depth
+          schema: { type: integer, minimum: 1, maximum: 3, default: 1 }
+      responses:
+        "200": { description: Nodes and edges }

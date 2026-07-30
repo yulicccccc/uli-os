@@ -1,0 +1,84 @@
+
+> uli-os@0.1.0 test
+> npm run build:core && node --test tests/*.test.cjs
+
+
+> uli-os@0.1.0 build:core
+> rm -rf dist && tsc -p tsconfig.json
+
+TAP version 13
+# Subtest: vertical slice preserves original event and creates a pending candidate
+ok 1 - vertical slice preserves original event and creates a pending candidate
+  ---
+  duration_ms: 1.190352
+  type: 'test'
+  ...
+# Subtest: a model update remains non-final until Uli confirms it
+ok 2 - a model update remains non-final until Uli confirms it
+  ---
+  duration_ms: 0.327754
+  type: 'test'
+  ...
+# Subtest: every model requires an explicit boundary
+ok 3 - every model requires an explicit boundary
+  ---
+  duration_ms: 1.250801
+  type: 'test'
+  ...
+# Subtest: maturity becomes supported across two contexts
+ok 4 - maturity becomes supported across two contexts
+  ---
+  duration_ms: 0.314165
+  type: 'test'
+  ...
+# Subtest: maturity becomes stable across repeated evidence in three contexts
+ok 5 - maturity becomes stable across repeated evidence in three contexts
+  ---
+  duration_ms: 0.135908
+  type: 'test'
+  ...
+# Subtest: a strong contradiction moves a stable model under tension
+ok 6 - a strong contradiction moves a stable model under tension
+  ---
+  duration_ms: 0.131261
+  type: 'test'
+  ...
+# Subtest: no model update is created when evidence is too weak
+ok 7 - no model update is created when evidence is too weak
+  ---
+  duration_ms: 0.189123
+  type: 'test'
+  ...
+# Subtest: SUPPORTS accepts evidence -> model
+ok 8 - SUPPORTS accepts evidence -> model
+  ---
+  duration_ms: 1.549931
+  type: 'test'
+  ...
+# Subtest: SUPPORTS rejects event -> place
+ok 9 - SUPPORTS rejects event -> place
+  ---
+  duration_ms: 0.160821
+  type: 'test'
+  ...
+# Subtest: AI-created edges require a reasoning record
+ok 10 - AI-created edges require a reasoning record
+  ---
+  duration_ms: 0.350165
+  type: 'test'
+  ...
+# Subtest: confirmation-required relationships cannot be AI-confirmed
+ok 11 - confirmation-required relationships cannot be AI-confirmed
+  ---
+  duration_ms: 0.183421
+  type: 'test'
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 84.107148

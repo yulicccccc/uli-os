@@ -1,0 +1,18 @@
+{
+  "name": "uli-os",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.14.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build:core": "rm -rf dist && tsc -p tsconfig.json",
+    "test": "npm run build:core && node --test tests/*.test.cjs",
+    "demo": "npm run build:core && node dist/scripts/demo.js"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}

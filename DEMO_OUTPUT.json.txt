@@ -1,0 +1,124 @@
+
+> uli-os@0.1.0 demo
+> npm run build:core && node dist/scripts/demo.js
+
+
+> uli-os@0.1.0 build:core
+> rm -rf dist && tsc -p tsconfig.json
+
+{
+  "event": {
+    "id": "event_demo_001",
+    "nodeType": "event",
+    "status": "active",
+    "sourceType": "user",
+    "createdBy": "uli",
+    "createdAt": "2026-07-30T20:05:00-05:00",
+    "updatedAt": "2026-07-30T20:05:00-05:00",
+    "rawContent": "今天我已经把拉伸缩小成只做一分钟，但我还是没有开始，因为身体非常累。",
+    "occurredAt": "2026-07-30T20:00:00-05:00",
+    "capturedAt": "2026-07-30T20:05:00-05:00"
+  },
+  "reasoningRecord": {
+    "schemaVersion": "1.0",
+    "engineVersion": "mock-rule-engine@0.1.0",
+    "promptVersion": "mock-no-prompt",
+    "inputNodeIds": [
+      "event_demo_001"
+    ],
+    "candidateExplanations": [
+      {
+        "key": "energy_boundary",
+        "statement": "Low physical energy may independently constrain action even when the task entry is clear.",
+        "confidence": 0.78,
+        "supportingGroundIds": [
+          "ground_event_1"
+        ]
+      },
+      {
+        "key": "entry_method_failure",
+        "statement": "The reduced-entry method may have failed in this instance.",
+        "confidence": 0.42,
+        "supportingGroundIds": [
+          "ground_event_1"
+        ],
+        "competingWith": [
+          "energy_boundary"
+        ]
+      }
+    ],
+    "grounds": [
+      {
+        "id": "ground_event_1",
+        "statement": "今天我已经把拉伸缩小成只做一分钟，但我还是没有开始，因为身体非常累。",
+        "sourceNodeIds": [
+          "event_demo_001"
+        ],
+        "kind": "observed_fact"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "create_evidence",
+        "statement": "A clearly reduced task entry did not lead to action during a very low-energy state.",
+        "confidence": 0.92
+      },
+      {
+        "type": "expose_boundary",
+        "statement": "Very low physical energy may be a boundary for task-entry interventions.",
+        "confidence": 0.78
+      },
+      {
+        "type": "propose_model_update",
+        "statement": "Task-entry friction and available physical energy are independent variables in starting action.",
+        "confidence": 0.78
+      }
+    ],
+    "confidenceLevel": "medium",
+    "uncertainties": [
+      "The threshold between ordinary tiredness and very low energy is not yet defined.",
+      "It is not yet known whether emotional threat also contributed."
+    ],
+    "recommendedAction": "propose_model_update",
+    "summary": "The event challenges an overgeneralized start-method model and suggests an energy boundary.",
+    "id": "reasoning_demo_001",
+    "createdAt": "2026-07-30T20:05:00-05:00"
+  },
+  "evidence": {
+    "id": "evidence_demo_001",
+    "nodeType": "evidence",
+    "status": "proposed",
+    "sourceType": "ai",
+    "createdBy": "ai",
+    "createdAt": "2026-07-30T20:05:00-05:00",
+    "updatedAt": "2026-07-30T20:05:00-05:00",
+    "claim": "A clearly reduced task entry did not lead to action during a very low-energy state.",
+    "polarity": "unknown",
+    "sourceEventId": "event_demo_001",
+    "reasoningRecordId": "reasoning_demo_001"
+  },
+  "modelUpdateCandidate": {
+    "id": "candidate_demo_001",
+    "proposedStatement": "Task-entry friction and available physical energy are independent variables in starting action.",
+    "triggerEvidenceNodeIds": [
+      "evidence_demo_001"
+    ],
+    "boundary": {
+      "verifiedApplicable": [],
+      "unverified": [
+        "The threshold between ordinary tiredness and very low energy is not yet defined.",
+        "It is not yet known whether emotional threat also contributed."
+      ],
+      "knownFailures": []
+    },
+    "applicableContexts": [],
+    "unresolvedQuestions": [
+      "The threshold between ordinary tiredness and very low energy is not yet defined.",
+      "It is not yet known whether emotional threat also contributed."
+    ],
+    "confidence": 0.78,
+    "status": "pending",
+    "reasoningRecordId": "reasoning_demo_001",
+    "createdAt": "2026-07-30T20:05:00-05:00"
+  }
+}
