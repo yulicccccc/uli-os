@@ -28,7 +28,7 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Install, test, build, and deploy
+      - name: Install, test, build, deploy, and smoke test
         id: deploy
         shell: bash
         run: |
@@ -51,20 +51,46 @@ jobs:
           deployment_url=$(grep -Eo 'https://[^[:space:]]+workers\.dev[^[:space:]]*' CLOUDFLARE_TEMP_DEPLOYMENT.txt | tail -1 || true)
           claim_url=$(grep -Eo 'https://dash\.cloudflare\.com/[^[:space:]]+' CLOUDFLARE_TEMP_DEPLOYMENT.txt | tail -1 || true)
 
+          smoke_exit=1
+          smoke_status="not-run"
+          smoke_body_marker="missing"
+
+          if [ "$deploy_exit" -eq 0 ] && [ -n "$deployment_url" ]; then
+            for attempt in 1 2 3 4 5 6 7 8 9 10; do
+              smoke_status=$(curl --silent --show-error --location --output /tmp/uli-os-smoke.html --write-out '%{http_code}' "$deployment_url" || true)
+              if [ "$smoke_status" = "200" ] && grep --quiet "Uli OS" /tmp/uli-os-smoke.html; then
+                smoke_exit=0
+                smoke_body_marker="present"
+                break
+              fi
+              sleep 3
+            done
+          fi
+
+          if [ "$deploy_exit" -ne 0 ]; then
+            overall_exit=$deploy_exit
+          else
+            overall_exit=$smoke_exit
+          fi
+
           {
             echo "# Cloudflare Temporary Deployment Evidence"
             echo
             echo "- Commit: ${GITHUB_SHA}"
             echo "- Workflow run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-            echo "- Exit code: ${deploy_exit}"
+            echo "- Deploy exit code: ${deploy_exit}"
+            echo "- Smoke-test exit code: ${smoke_exit}"
+            echo "- HTTP status: ${smoke_status}"
+            echo "- Expected body marker: ${smoke_body_marker}"
+            echo "- Overall exit code: ${overall_exit}"
             echo "- Generated at: $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
             if [ -n "$deployment_url" ]; then echo "- Deployment URL: ${deployment_url}"; fi
             if [ -n "$claim_url" ]; then echo "- Claim URL: ${claim_url}"; fi
             echo
-            echo "The raw command output is stored in \`CLOUDFLARE_TEMP_DEPLOYMENT.txt\`."
+            echo "The raw build and deployment output is stored in \`CLOUDFLARE_TEMP_DEPLOYMENT.txt\`."
           } > CLOUDFLARE_TEMP_DEPLOYMENT.md
 
-          echo "deploy_exit=${deploy_exit}" >> "$GITHUB_OUTPUT"
+          echo "overall_exit=${overall_exit}" >> "$GITHUB_OUTPUT"
 
       - name: Commit lockfile and deployment evidence
         shell: bash
@@ -80,9 +106,9 @@ jobs:
             git push origin HEAD:main
           fi
 
-      - name: Fail if deployment failed
-        if: steps.deploy.outputs.deploy_exit != '0'
+      - name: Fail if deployment or smoke test failed
+        if: steps.deploy.outputs.overall_exit != '0'
         shell: bash
         run: |
-          echo "Cloudflare temporary deployment failed. See CLOUDFLARE_TEMP_DEPLOYMENT.txt in the repository."
+          echo "Cloudflare verification failed. See CLOUDFLARE_TEMP_DEPLOYMENT.md and .txt in the repository."
           exit 1
