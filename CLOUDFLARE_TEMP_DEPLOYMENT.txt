@@ -4,10 +4,10 @@ Lockfile is up to date, resolution step is skipped
 Progress: resolved 1, reused 0, downloaded 0, added 0
 Packages: +342
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Progress: resolved 342, reused 0, downloaded 18, added 4
-Progress: resolved 342, reused 0, downloaded 70, added 24
-Progress: resolved 342, reused 0, downloaded 267, added 154
-Progress: resolved 342, reused 0, downloaded 322, added 178
+Progress: resolved 342, reused 0, downloaded 52, added 28
+Progress: resolved 342, reused 0, downloaded 119, added 87
+Progress: resolved 342, reused 0, downloaded 280, added 197
+Progress: resolved 342, reused 0, downloaded 293, added 201
 Progress: resolved 342, reused 0, downloaded 342, added 342, done
 
 devDependencies:
@@ -21,7 +21,7 @@ devDependencies:
 │                                                                              │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 
-Done in 5.5s using pnpm v10.14.0
+Done in 5.6s using pnpm v10.14.0
 
 > uli-os@0.1.0 test /home/runner/work/uli-os/uli-os
 > npm run build:core && node --test tests/*.test.cjs
@@ -34,67 +34,67 @@ TAP version 13
 # Subtest: vertical slice preserves original event and creates a pending candidate
 ok 1 - vertical slice preserves original event and creates a pending candidate
   ---
-  duration_ms: 1.242975
+  duration_ms: 1.339676
   type: 'test'
   ...
 # Subtest: a model update remains non-final until Uli confirms it
 ok 2 - a model update remains non-final until Uli confirms it
   ---
-  duration_ms: 1.065313
+  duration_ms: 1.179579
   type: 'test'
   ...
 # Subtest: every model requires an explicit boundary
 ok 3 - every model requires an explicit boundary
   ---
-  duration_ms: 0.590154
+  duration_ms: 0.480322
   type: 'test'
   ...
 # Subtest: maturity becomes supported across two contexts
 ok 4 - maturity becomes supported across two contexts
   ---
-  duration_ms: 0.446896
+  duration_ms: 0.32884
   type: 'test'
   ...
 # Subtest: maturity becomes stable across repeated evidence in three contexts
 ok 5 - maturity becomes stable across repeated evidence in three contexts
   ---
-  duration_ms: 0.254106
+  duration_ms: 0.179413
   type: 'test'
   ...
 # Subtest: a strong contradiction moves a stable model under tension
 ok 6 - a strong contradiction moves a stable model under tension
   ---
-  duration_ms: 0.316903
+  duration_ms: 0.184702
   type: 'test'
   ...
 # Subtest: no model update is created when evidence is too weak
 ok 7 - no model update is created when evidence is too weak
   ---
-  duration_ms: 0.356517
+  duration_ms: 0.247079
   type: 'test'
   ...
 # Subtest: SUPPORTS accepts evidence -> model
 ok 8 - SUPPORTS accepts evidence -> model
   ---
-  duration_ms: 1.622946
+  duration_ms: 1.801502
   type: 'test'
   ...
 # Subtest: SUPPORTS rejects event -> place
 ok 9 - SUPPORTS rejects event -> place
   ---
-  duration_ms: 0.185106
+  duration_ms: 0.250335
   type: 'test'
   ...
 # Subtest: AI-created edges require a reasoning record
 ok 10 - AI-created edges require a reasoning record
   ---
-  duration_ms: 0.464429
+  duration_ms: 0.504937
   type: 'test'
   ...
 # Subtest: confirmation-required relationships cannot be AI-confirmed
 ok 11 - confirmation-required relationships cannot be AI-confirmed
   ---
-  duration_ms: 0.323555
+  duration_ms: 0.342566
   type: 'test'
   ...
 1..11
@@ -105,7 +105,7 @@ ok 11 - confirmation-required relationships cannot be AI-confirmed
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 75.347231
+# duration_ms 79.544958
 
 > @uli-os/web@0.1.0 cf:build /home/runner/work/uli-os/uli-os/apps/web
 > opennextjs-cloudflare build
@@ -139,14 +139,12 @@ https://nextjs.org/telemetry
 ▲ Next.js 16.2.11 (Turbopack)
 
   Creating an optimized production build ...
-✓ Compiled successfully in 2.4s
+✓ Compiled successfully in 2.5s
   Running TypeScript ...
-
-  We detected TypeScript in your project and created a tsconfig.json file for you.
-  Finished TypeScript in 2.8s ...
+  Finished TypeScript in 3.0s ...
   Collecting page data using 3 workers ...
   Generating static pages using 3 workers (0/3) ...
-✓ Generating static pages using 3 workers (3/3) in 132ms
+✓ Generating static pages using 3 workers (3/3) in 146ms
   Finalizing page optimization ...
 
 Route (app)
@@ -165,7 +163,7 @@ Bundling middleware function...
 Bundling static assets...
 Bundling cache assets...
 Building server function: default...
-Applying code patches: 2.175s
+Applying code patches: 2.223s
 # copyPackageTemplateFiles
 ⚙️ Bundling the OpenNext server...
 
@@ -192,35 +190,35 @@ Cloudflare collects anonymous telemetry about your usage of Wrangler. Learn more
 Continuing means you accept Cloudflare's Terms of Service (https://www.cloudflare.com/terms/) and Privacy Policy (https://www.cloudflare.com/privacypolicy/).
 Solving proof-of-work challenge…
 Temporary account ready:
-	Account: Superficial Snout (created)
+	Account: Flint Oak (created)
 	Claim within: 60 minutes
-	Claim URL: https://dash.cloudflare.com/claim-preview?claimToken=lXUlQZAkiAlRhWMPIb9-8KDdrbxAxrfuuDq9t5F0Yko
+	Claim URL: https://dash.cloudflare.com/claim-preview?claimToken=Tsrb2YYScgR_jWcNu4NQJRnux6H9wpJ5Fnp-ufcIFwQ
 🌀 Building list of assets...
 ✨ Read 15 files from the assets directory /home/runner/work/uli-os/uli-os/apps/web/.open-next/assets
 🌀 Starting asset upload...
 🌀 Found 10 new or modified static assets to upload. Proceeding with upload...
 + /BUILD_ID
-+ /_next/static/i2_rq6e_9gZe-m3dmqxKA/_buildManifest.js
++ /_next/static/CQp9ghwbUXk3kS2IuV1Bv/_buildManifest.js
 + /_next/static/chunks/0-v7vr566fqht.js
 + /_next/static/chunks/1j_awki_td03s.js
-+ /_next/static/i2_rq6e_9gZe-m3dmqxKA/_ssgManifest.js
++ /_next/static/CQp9ghwbUXk3kS2IuV1Bv/_ssgManifest.js
 + /_next/static/chunks/turbopack-3030-9wt0jf4b.js
 + /_next/static/chunks/0cz1d0mv5g_q7.js
-+ /_next/static/i2_rq6e_9gZe-m3dmqxKA/_clientMiddlewareManifest.js
++ /_next/static/CQp9ghwbUXk3kS2IuV1Bv/_clientMiddlewareManifest.js
 + /_next/static/chunks/3fq1mjqo3uks1.js
 + /_next/static/chunks/43fajpu7058tx.js
-Uploaded 4 of 10 assets
+Uploaded 3 of 10 assets
 Uploaded 7 of 10 assets
 Uploaded 10 of 10 assets
-✨ Success! Uploaded 10 files (1.53 sec)
+✨ Success! Uploaded 10 files (1.19 sec)
 
 Total Upload: 3722.65 KiB / gzip: 769.75 KiB
-Worker Startup Time: 29 ms
+Worker Startup Time: 27 ms
 Your Worker has access to the following bindings:
 Binding            Resource      
 env.ASSETS         Assets        
 
-Uploaded uli-os-web (8.88 sec)
-Deployed uli-os-web triggers (1.33 sec)
-  https://uli-os-web.superficial-snout.workers.dev
-Current Version ID: 184b323f-3ba9-4c44-82dc-1a06eff1812c
+Uploaded uli-os-web (5.53 sec)
+Deployed uli-os-web triggers (0.64 sec)
+  https://uli-os-web.flint-oak.workers.dev
+Current Version ID: 49caeee3-755b-4b41-90dd-744a4c1b5614
