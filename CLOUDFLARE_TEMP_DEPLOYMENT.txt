@@ -1,23 +1,124 @@
+Preparing pnpm@10.14.0 for immediate activation...
+Scope: all 5 workspace projects
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Progress: resolved 9, reused 0, downloaded 7, added 0
+Progress: resolved 61, reused 0, downloaded 39, added 0
+Progress: resolved 103, reused 0, downloaded 48, added 0
+Progress: resolved 175, reused 0, downloaded 94, added 0
+Progress: resolved 368, reused 0, downloaded 232, added 0
+ WARN  2 deprecated subdependencies found: glob@9.3.5, node-domexception@1.0.0
+Packages: +342
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 452, reused 0, downloaded 344, added 341
+Progress: resolved 452, reused 0, downloaded 344, added 342, done
 
- ⛅️ wrangler 4.116.0
-────────────────────
-[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNo lock file has been detected in the current working directory. This might indicate that the project is part of a workspace. Auto-configuration of projects inside workspaces is limited. See https://developers.cloudflare.com/workers/framework-guides/automatic-configuration/#workspaces[0m
+devDependencies:
++ typescript 5.9.3 (7.0.2 is available)
+
+╭ Warning ─────────────────────────────────────────────────────────────────────╮
+│                                                                              │
+│   Ignored build scripts: esbuild, sharp, workerd.                            │
+│   Run "pnpm approve-builds" to pick which dependencies should be allowed     │
+│   to run scripts.                                                            │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+Done in 7.2s using pnpm v10.14.0
+
+> uli-os@0.1.0 test /home/runner/work/uli-os/uli-os
+> npm run build:core && node --test tests/*.test.cjs
 
 
+> uli-os@0.1.0 build:core
+> rm -rf dist && tsc -p tsconfig.json
 
-Detected Project Settings:
- - Worker Name: uli-os-web
- - Framework: Next.js
- - Build Command: npm run build
- - Output Directory: .next
+TAP version 13
+# Subtest: vertical slice preserves original event and creates a pending candidate
+ok 1 - vertical slice preserves original event and creates a pending candidate
+  ---
+  duration_ms: 1.25699
+  type: 'test'
+  ...
+# Subtest: a model update remains non-final until Uli confirms it
+ok 2 - a model update remains non-final until Uli confirms it
+  ---
+  duration_ms: 1.018045
+  type: 'test'
+  ...
+# Subtest: every model requires an explicit boundary
+ok 3 - every model requires an explicit boundary
+  ---
+  duration_ms: 0.462101
+  type: 'test'
+  ...
+# Subtest: maturity becomes supported across two contexts
+ok 4 - maturity becomes supported across two contexts
+  ---
+  duration_ms: 0.329694
+  type: 'test'
+  ...
+# Subtest: maturity becomes stable across repeated evidence in three contexts
+ok 5 - maturity becomes stable across repeated evidence in three contexts
+  ---
+  duration_ms: 0.170848
+  type: 'test'
+  ...
+# Subtest: a strong contradiction moves a stable model under tension
+ok 6 - a strong contradiction moves a stable model under tension
+  ---
+  duration_ms: 0.181167
+  type: 'test'
+  ...
+# Subtest: no model update is created when evidence is too weak
+ok 7 - no model update is created when evidence is too weak
+  ---
+  duration_ms: 0.241679
+  type: 'test'
+  ...
+# Subtest: SUPPORTS accepts evidence -> model
+ok 8 - SUPPORTS accepts evidence -> model
+  ---
+  duration_ms: 1.261257
+  type: 'test'
+  ...
+# Subtest: SUPPORTS rejects event -> place
+ok 9 - SUPPORTS rejects event -> place
+  ---
+  duration_ms: 0.155249
+  type: 'test'
+  ...
+# Subtest: AI-created edges require a reasoning record
+ok 10 - AI-created edges require a reasoning record
+  ---
+  duration_ms: 0.405375
+  type: 'test'
+  ...
+# Subtest: confirmation-required relationships cannot be AI-confirmed
+ok 11 - confirmation-required relationships cannot be AI-confirmed
+  ---
+  duration_ms: 0.320196
+  type: 'test'
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 67.686613
 
-? Do you want to modify these settings?
-🤖 Using fallback value in non-interactive context: no
-
-Cloudflare collects anonymous telemetry about your usage of Wrangler. Learn more at https://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler/telemetry.md
-
-[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mUnable to detect the version of the `next` package[0m
+> @uli-os/web@0.1.0 cf:build /home/runner/work/uli-os/uli-os/apps/web
+> opennextjs-cloudflare build
 
 
-[32mIf you think this is a bug then please create an issue at https://github.com/cloudflare/workers-sdk/issues/new/choose[0m
-🪵  Logs were written to "/home/runner/.config/.wrangler/logs/wrangler-2026-07-30_17-59-08_927.log"
+┌─────────────────────────────┐
+│ OpenNext — Cloudflare build │
+└─────────────────────────────┘
+
+Monorepo detected at /home/runner/work/uli-os/uli-os
+ERROR Error: next.config.js not found. Please make sure you are running this command inside a Next.js app.
+/home/runner/work/uli-os/uli-os/apps/web:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @uli-os/web@0.1.0 cf:build: `opennextjs-cloudflare build`
+Exit status 1
