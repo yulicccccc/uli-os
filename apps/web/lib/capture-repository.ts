@@ -25,6 +25,11 @@ interface EventRow {
   readonly content_sha256: string;
 }
 
+interface IdempotencyRow {
+  readonly request_hash: string;
+  readonly response_node_id: string;
+}
+
 function getSql() {
   const databaseUrl = process.env.DATABASE_URL;
   if (!databaseUrl) throw new DatabaseUnavailableError();
@@ -51,7 +56,7 @@ async function readEventById(
   identity: AccessIdentity,
 ): Promise<EventRow | null> {
   const sql = getSql();
-  const rows = await sql<EventRow[]>`
+  const rows = (await sql`
     SELECT
       e.node_id,
       e.raw_content,
@@ -62,7 +67,7 @@ async function readEventById(
     WHERE e.node_id = ${nodeId}::uuid
       AND e.captured_by_subject = ${identity.subject}
     LIMIT 1
-  `;
+  `) as EventRow[];
 
   return rows[0] ?? null;
 }
@@ -90,15 +95,13 @@ export async function createCapturedEvent(
     }),
   );
 
-  const existing = await sql<
-    Array<{ request_hash: string; response_node_id: string }>
-  >`
+  const existing = (await sql`
     SELECT request_hash, response_node_id
     FROM command_idempotency
     WHERE command_type = 'capture_event'
       AND idempotency_key = ${command.idempotencyKey}
     LIMIT 1
-  `;
+  `) as IdempotencyRow[];
 
   if (existing[0]) {
     if (existing[0].request_hash !== requestHash) {
@@ -162,15 +165,13 @@ export async function createCapturedEvent(
       { isolationMode: "Serializable" },
     );
   } catch (error) {
-    const raced = await sql<
-      Array<{ request_hash: string; response_node_id: string }>
-    >`
+    const raced = (await sql`
       SELECT request_hash, response_node_id
       FROM command_idempotency
       WHERE command_type = 'capture_event'
         AND idempotency_key = ${command.idempotencyKey}
       LIMIT 1
-    `;
+    `) as IdempotencyRow[];
 
     if (raced[0]?.request_hash === requestHash) {
       const racedEvent = await readEventById(raced[0].response_node_id, identity);
