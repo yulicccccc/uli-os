@@ -1,8 +1,7 @@
 import { neon } from "@neondatabase/serverless";
 import type { AccessIdentity } from "./access";
+import type { CaptureCommand, CapturedEvent } from "./capture-contract";
 import { sha256Hex } from "./hash";
-import type { CaptureCommand, CapturedEvent } from "../../../packages/capture-core/src";
-import { asISODateTime, asNodeId } from "../../../packages/shared-types/src";
 
 export class DatabaseUnavailableError extends Error {
   constructor(message = "Database is not configured.") {
@@ -38,10 +37,10 @@ function toIso(value: string | Date): string {
 
 function mapEvent(row: EventRow, replayed: boolean): CapturedEvent {
   return {
-    id: asNodeId(row.node_id),
+    id: row.node_id,
     rawContent: row.raw_content,
-    occurredAt: asISODateTime(toIso(row.occurred_at)),
-    capturedAt: asISODateTime(toIso(row.captured_at)),
+    occurredAt: toIso(row.occurred_at),
+    capturedAt: toIso(row.captured_at),
     contentSha256: row.content_sha256,
     replayed,
   };
