@@ -1,0 +1,45 @@
+name: M01 Capture Verification
+
+on:
+  push:
+    branches: ["feature/m01-capture"]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install dependencies and refresh lockfile
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.14.0 --activate
+          pnpm install --no-frozen-lockfile
+      - name: Core regression tests
+        run: pnpm test
+      - name: Next.js build
+        run: pnpm --filter @uli-os/web build
+      - name: OpenNext Cloudflare build
+        run: pnpm --filter @uli-os/web cf:build
+      - name: Commit verified lockfile
+        if: github.event_name == 'push'
+        run: |
+          if git diff --quiet -- pnpm-lock.yaml; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add pnpm-lock.yaml
+          git commit -m "chore: lock M01 verified dependencies [skip ci]"
+          git push origin HEAD:${{ github.ref_name }}
