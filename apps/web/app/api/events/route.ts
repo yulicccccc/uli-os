@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import {
   CaptureValidationError,
   validateCaptureCommand,
-} from "../../../../../packages/capture-core/src";
+} from "../../../lib/capture-contract";
 import { AccessDeniedError, verifyAccessRequest } from "../../../lib/access";
 import {
   createCapturedEvent,
