@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const phases = [
   ["🌱 捕捉", "保留原始经历，不覆盖、不改写。"],
   ["🧠 推理", "生成可审计的结构化推理记录。"],
@@ -63,6 +65,22 @@ export default function HomePage() {
           >
             Uli OS 不是普通笔记软件。它通过持续、高质量的对话，帮助一个人把真实经历转化为模型、身份与人生叙事。
           </p>
+
+          <Link
+            href="/capture"
+            style={{
+              display: "inline-block",
+              marginTop: 28,
+              padding: "13px 22px",
+              borderRadius: 999,
+              background: "#17181c",
+              color: "#fff",
+              textDecoration: "none",
+              fontWeight: 700,
+            }}
+          >
+            进入经历捕捉 →
+          </Link>
         </header>
 
         <section
@@ -120,7 +138,7 @@ export default function HomePage() {
         </section>
 
         <footer style={{ marginTop: 36, color: "#8a91a0", fontSize: 14 }}>
-          当前版本只展示第一条可运行的认知闭环，尚不接收真实个人数据。
+          M01 只处理原始经历的安全保存与读取；AI 推理尚未接入。
         </footer>
       </div>
     </main>
