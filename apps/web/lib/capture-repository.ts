@@ -162,7 +162,7 @@ export async function createCapturedEvent(
           )
         `,
       ],
-      { isolationMode: "Serializable" },
+      { isolationLevel: "Serializable" },
     );
   } catch (error) {
     const raced = (await sql`
