@@ -8,75 +8,47 @@ Date: 2026-08-11
 
 ## Task
 
-Perform a **bidirectional context reconciliation smoke test** for Uli OS Team Brain v1.
+Perform a **fresh Team Brain bootstrap comprehension test** for Uli OS.
 
-You are not assumed to be blank. Use both:
+Codex currently has no Uli OS context. Treat the repository as the authoritative starting point. Do not rely on prior Codex conversation memory, and do not implement M01 yet.
 
-1. the repository-native Team Brain and canonical docs; and
-2. any relevant context already present in your current Codex conversation/session about Uli OS.
-
-Do not implement M01 yet.
-
-The goal is to reconcile what ChatGPT currently knows with what Codex already knows, so future work starts from one shared external state rather than two partially overlapping memories.
-
-## Required reading
-
-Read `AGENTS.md` and all start-of-task files it requires. Run:
+Read `AGENTS.md` and every start-of-task file it requires, then run:
 
 ```bash
 pnpm team:check
 pnpm team:context
 ```
 
-Also review PR #2 and any relevant prior Uli OS context already available in your current Codex session.
+Also inspect PR #2 because M01 implementation currently lives on its feature branch.
 
-## Reconciliation rules
+## Goal
 
-Classify Codex-local context into four buckets:
+From repository-native context alone, reconstruct and record:
 
-### A. Already shared
-
-Context that is already accurately represented in canonical docs or `.ai-bridge/*`. No duplicate write is needed.
-
-### B. Codex-only, user-confirmed context
-
-A fact, requirement, decision, preference, or implementation constraint that Uli explicitly confirmed in Codex but is missing from Team Brain.
-
-Record it in `.ai-bridge/agent-notes/codex-engineer.md` with its provenance. If it may change product truth, also add it to `.ai-bridge/OPEN_QUESTIONS.md` for ChatGPT/Uli review. Do **not** silently promote it into `PRD.md` or `DECISIONS.md`.
-
-### C. Codex-only engineering discovery
-
-A repository/runtime/test fact discovered by Codex that is not yet reflected in shared state.
-
-Record the evidence and recommended canonical destination. Do not label it verified unless evidence exists.
-
-### D. Conflict or uncertainty
-
-Anything in Codex-local context that conflicts with Team Brain, canonical docs, or current repository evidence.
-
-Preserve both sides, cite the conflicting sources, and add an explicit open question. Do not guess which side wins.
-
-## Important boundary
-
-Do not persist hidden chain-of-thought or private scratch reasoning. Share only concise external reasoning state: facts, judgments, evidence, uncertainty, decisions/proposals, and next actions.
-
-Do not treat an earlier Codex suggestion as a product requirement merely because it exists in conversation history. User-confirmed decisions outrank agent suggestions; canonical docs remain authoritative until explicitly updated.
+1. what Uli OS is trying to accomplish at MVP level;
+2. the canonical product/technical rules that must not be violated;
+3. what Team Brain is and how AI employees use it;
+4. what has been verified in Cloudflare, Access, Neon, and CI;
+5. the exact current status of M00 and M01;
+6. what still blocks M01 acceptance;
+7. which sources are canonical versus temporary working state;
+8. what Codex is permitted to do next.
 
 ## Scope
 
 Allowed:
 
-- read repository files, PR #2, branches, CI, and relevant existing Codex-session context;
+- read repository files, PR #2, branches, and CI;
 - run `pnpm team:check` and `pnpm team:context`;
-- update `.ai-bridge/agent-notes/codex-engineer.md` with the reconciliation result;
-- update `.ai-bridge/OPEN_QUESTIONS.md` with discrepancies or Codex-only context that needs review;
-- recommend canonical-doc updates without making product decisions on Uli's behalf.
+- update `.ai-bridge/agent-notes/codex-engineer.md` with the bootstrap comprehension result;
+- add factual discrepancies to `.ai-bridge/OPEN_QUESTIONS.md`.
 
-Not allowed in this handoff:
+Not allowed:
 
 - change M01 business logic;
 - add M02 or later modules;
-- silently change `PRD.md` or locked decisions based only on Codex-local history;
+- infer missing product requirements from code/UI;
+- change canonical product decisions;
 - expose or request database credentials;
 - mark M01 complete.
 
@@ -84,26 +56,24 @@ Not allowed in this handoff:
 
 Update `.ai-bridge/agent-notes/codex-engineer.md` with:
 
-1. **Shared understanding** — what Team Brain and Codex agree on.
-2. **Codex-only user-confirmed context** — items Uli explicitly established in Codex but Team Brain lacks.
-3. **Codex-only engineering discoveries** — evidence-backed implementation facts not yet shared.
-4. **Conflicts / uncertainties** — anything that cannot be reconciled safely.
-5. **Current judgment** — your concise engineering interpretation.
-6. **Evidence** — files, commits, PRs, CI, runtime evidence, or explicit Uli instructions.
-7. **Recommended next action**.
-8. **Recommended next owner**.
+1. **Task**
+2. **Observed facts**
+3. **Current judgment**
+4. **Evidence**
+5. **Uncertainty / risk**
+6. **Recommended next action**
+7. **Recommended next owner**
 
-If a bucket is empty, write `None found` rather than inventing content.
+If repository sources conflict, preserve the conflict in `.ai-bridge/OPEN_QUESTIONS.md` instead of guessing.
 
 ## Acceptance evidence
 
 - `pnpm team:check` passes;
 - `pnpm team:context` produces a coherent packet;
-- Codex explicitly compares repository context with its own relevant existing session context;
-- Codex writes the reconciliation result to its agent note;
-- unresolved conflicts are surfaced in `OPEN_QUESTIONS.md`;
-- no business-code files are modified during this smoke test.
+- Codex can accurately reconstruct current Uli OS state from repository context alone;
+- Codex writes its structured note back to `.ai-bridge/agent-notes/codex-engineer.md`;
+- no business-code files are modified during this bootstrap.
 
 ## Next owner after acceptance
 
-ChatGPT / Product & Architecture Lead reads the Codex note directly from GitHub, reconciles any remaining product-level gaps with Uli, updates canonical docs where appropriate, and then issues the next M01 handoff.
+ChatGPT / Product & Architecture Lead reads Codex's note directly from GitHub, resolves any documentation gaps with Uli, and then issues the next M01 engineering handoff.
