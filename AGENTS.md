@@ -42,6 +42,21 @@ Do not write, request, or persist hidden chain-of-thought. The Team Brain stores
 
 This is the shared interface between ChatGPT, Codex, validators, designers, researchers, and future AI employees.
 
+### 3.1 Reconcile agent-local context
+
+An AI employee may already have relevant Uli OS context in its own current conversation/session. That context is useful but is **not automatically canonical**.
+
+When a handoff requests reconciliation:
+
+- compare relevant agent-local context with canonical docs and Team Brain;
+- distinguish Uli-confirmed facts/decisions from agent suggestions or speculation;
+- write missing Uli-confirmed context into the employee note with provenance;
+- surface conflicts or uncertain items in `OPEN_QUESTIONS.md`;
+- never silently overwrite canonical docs from local conversation memory;
+- never persist hidden chain-of-thought or private scratch reasoning.
+
+The purpose is bidirectional synchronization of external reasoning state, not replication of raw chat history.
+
 ## 4. Before implementation
 
 For every code or infrastructure change:
