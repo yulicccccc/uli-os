@@ -4,18 +4,18 @@ Last updated: 2026-08-11
 
 ## P0 — blocks active work
 
-### TB-Q02 — Can Codex reconstruct Uli OS state from Team Brain without Uli retransmitting chat context?
+### TB-Q02 — Can Codex bootstrap correctly from Team Brain with no prior Uli OS context?
 
 - Owner: Codex / Implementation Engineer
-- Status: ready for smoke test
+- Status: ready now
 - Handoff: `TB-HO-001`
-- Needed evidence: `pnpm team:check`, `pnpm team:context`, and a structured Codex agent note with no business-code changes.
+- Needed evidence: Codex reads repository-native context, runs `pnpm team:check` and `pnpm team:context`, writes a structured comprehension note, and makes no business-code changes.
 
 ## P1 — blocks M01 acceptance
 
 ### M01-Q01 — Are production runtime secrets wired correctly?
 
-- Owner: Codex / Implementation Engineer after Team Brain smoke-test acceptance
+- Owner: Codex / Implementation Engineer after Team Brain bootstrap
 - Status: open
 - Known: database credentials must never be committed or pasted into Team Brain.
 - Needed evidence: runtime can connect to Neon using secret-managed configuration without exposing the value.
