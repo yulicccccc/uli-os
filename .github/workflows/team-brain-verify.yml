@@ -1,0 +1,44 @@
+name: Team Brain Verification
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  verify-team-brain:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Enable pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.14.0 --activate
+
+      - name: Verify Team Brain structure and secret hygiene
+        run: pnpm team:check
+
+      - name: Export shared employee context
+        run: |
+          pnpm team:context > /tmp/uli-team-context.md
+          test -s /tmp/uli-team-context.md
+          grep -q "ULI OS TEAM CONTEXT PACKET" /tmp/uli-team-context.md
+          grep -q "FILE: AGENTS.md" /tmp/uli-team-context.md
+          grep -q "FILE: .ai-bridge/HANDOFF.md" /tmp/uli-team-context.md
+
+      - name: Summary
+        run: |
+          echo "### Uli OS Team Brain" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Structural verification: PASS" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Shared context export: PASS" >> "$GITHUB_STEP_SUMMARY"
