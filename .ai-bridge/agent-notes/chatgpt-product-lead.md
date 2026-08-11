@@ -1,42 +1,47 @@
 # ChatGPT / Product & Architecture Lead — Latest Note
 
 Updated: 2026-08-11
-Status: active
+Status: handing off to Codex
 
 ## Task
 
-Design and establish Uli OS Team Brain v1 as the shared external reasoning interface across AI employees.
+Establish, verify, and activate Uli OS Team Brain v1 as the shared external reasoning interface across AI employees.
 
 ## Observed facts
 
-- The current repository did not contain `AGENTS.md` or `.ai-bridge/` before this infrastructure branch.
-- `PRD.md` on `main` is an MVP summary rather than a full Codex-grade PRD.
-- `IMPLEMENTATION_STATE.md` on `main` is stale and still describes the earlier temporary Cloudflare state.
-- PR #2 contains M01 Capture work and remains a draft.
-- Real Cloudflare Access and Neon infrastructure have progressed beyond what `main` currently documents.
+- The repository did not contain `AGENTS.md` or `.ai-bridge/` before INFRA-TB01.
+- Team Brain v1 was implemented in PR #3 and merged to `main`.
+- Team Brain Verification passed: required files, required sections, and secret-hygiene checks passed.
+- `pnpm team:context` successfully generated a coherent shared context packet in CI.
+- Existing Cognitive Core regression tests and the OpenNext Cloudflare build verification also passed on PR #3.
+- `IMPLEMENTATION_STATE.md` was synchronized with the current Harmless Kitten / Cloudflare Access / Neon / M01 reality.
+- PR #2 remains the draft M01 Capture implementation and is intentionally not being changed during the Team Brain smoke handoff.
 
 ## Current judgment
 
-The coordination failure is a shared-state problem, not a prompt-writing problem. A repository-native Team Brain is the smallest durable solution because all employees can read it, Git versions it, and Uli can audit it.
+The repository now has a viable shared reasoning interface. The next meaningful test is not another design discussion; it is whether Codex can independently reconstruct the project state and restrictions from repository context alone.
 
 ## Evidence
 
-- Branch: `infra/team-brain-v1`
+- Team Brain merge PR: `#3 — INFRA-TB01: Uli OS Team Brain v1`
+- Squash merge commit: `436c6b234caccee2c8f653de31ad009ee88e8992`
 - Protocol: `AGENTS.md`
 - Shared state: `.ai-bridge/TEAM_STATE.md`
-- Active decision: `.ai-bridge/CURRENT_DECISION.md`
-- Handoff: `.ai-bridge/HANDOFF.md`
+- Current handoff: `.ai-bridge/HANDOFF.md` (`TB-HO-001`)
+- Verifier: `scripts/team-brain-check.mjs`
+- Context exporter: `scripts/team-brain-context.mjs`
+- CI: `.github/workflows/team-brain-verify.yml`
 
 ## Uncertainty / risk
 
-- The initial Team Brain must not become a second canonical truth system that conflicts with `PRD.md` or `DECISIONS.md`.
-- `IMPLEMENTATION_STATE.md` still needs synchronization before Codex should rely on it without qualification.
-- Codex comprehension has not yet been smoke-tested against this protocol.
+- Codex has not yet completed the first repository-native comprehension smoke test.
+- The full PRD is still thinner than the long product-design history; missing requirements must remain unknown rather than inferred.
+- M01 runtime secret wiring and live save/read validation remain incomplete.
 
 ## Recommended next action
 
-Finish the checker/context exporter, synchronize implementation state, run CI, merge Team Brain, then issue the repository-native no-code Codex smoke handoff.
+Codex executes `TB-HO-001` with no business-code changes and writes its comprehension result into `.ai-bridge/agent-notes/codex-engineer.md`.
 
 ## Recommended next owner
 
-ChatGPT until Team Brain infrastructure is verified; then Codex for handoff smoke test.
+Codex / Implementation Engineer.
