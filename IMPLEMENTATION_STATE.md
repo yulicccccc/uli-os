@@ -1,7 +1,7 @@
 # Implementation State
 
 Last updated: 2026-08-11
-Checkpoint: `team-brain-v1-candidate`
+Checkpoint: `team-brain-v1-merged`
 
 ## Canonical infrastructure state
 
@@ -55,6 +55,10 @@ Checkpoint: `team-brain-v1-candidate`
 - Cloudflare Worker configuration
 - GitHub-to-Cloudflare continuous deployment
 - Cloudflare Access protection on the canonical Worker
+- Uli OS Team Brain v1 protocol and repository-native shared employee context
+- Team Brain structural/secret-hygiene verifier
+- Team Brain context exporter
+- Team Brain CI verification workflow
 
 ## M00 — Private Access Gate
 
@@ -90,20 +94,20 @@ Still required before M01 acceptance/merge:
 
 ## INFRA-TB01 — Uli OS Team Brain v1
 
-Status: **candidate on `infra/team-brain-v1`; not yet merged**
+Status: **merged and structurally verified; Codex comprehension smoke test pending**
 
-Purpose:
+Evidence:
 
-- provide one repository-native structured reasoning/handoff interface for ChatGPT, Codex, QA, and future AI employees;
-- prevent Uli from manually retransmitting project context between employees;
-- preserve a strict distinction between canonical product truth, current working reasoning, and implementation evidence.
+- PR `#3 — INFRA-TB01: Uli OS Team Brain v1`
+- squash merge commit `436c6b234caccee2c8f653de31ad009ee88e8992`
+- Team Brain Verification CI passed;
+- context exporter passed;
+- existing Cognitive Core regression and OpenNext Cloudflare build verification passed on the same PR.
 
-Acceptance requires:
+Current acceptance step:
 
-- Team Brain structural verifier passes;
-- context exporter produces a coherent packet;
-- CI passes;
-- first Codex no-business-code comprehension smoke test succeeds after merge.
+- `TB-HO-001` assigns Codex a no-business-code comprehension smoke test.
+- Team Brain becomes operationally accepted after Codex proves it can reconstruct the project state and constraints from repository context alone and writes a structured agent note.
 
 ## Known documentation debt
 
