@@ -14,6 +14,46 @@
 - Decision 062: Reasoning disagreements are preserved.
 - Decision 063: Resolutions preserve the full correction history.
 
+### Decision 064 — Visible Progress Principle
+
+Status: ACTIVE
+
+For every meaningful long-running process, Uli OS should expose the current state, meaningful progress, current bottleneck, next meaningful state, and next best move whenever the underlying data supports those representations.
+
+The purpose is cognitive externalization: the user should be able to see “where am I now?” without reconstructing status mentally from scattered text.
+
+### Decision 065 — Visual Status First
+
+Status: ACTIVE
+
+When a visual representation communicates status faster and more accurately than prose, Uli OS should prefer the visual representation and keep prose/evidence available as drill-down.
+
+Visualization must match the question:
+
+- progress bar / ratio for bounded completion;
+- stage or maturity track for qualitative progression;
+- radar chart for multidimensional comparable status;
+- line or sparkline for change over time;
+- timeline for event sequence and life chapters;
+- heatmap for repeated activity/evidence density;
+- graph or concept map for relationships;
+- counts/gauges only when the quantity itself is meaningful.
+
+Radar charts are encouraged when they make a multidimensional status immediately legible, but every axis must have a defined and comparable scale.
+
+### Decision 066 — Honest Quantification
+
+Status: ACTIVE
+
+Uli OS must not create false precision merely to produce satisfying charts.
+
+- Percentages require a defensible denominator.
+- Non-quantifiable growth uses explicit stages, maturity, confidence, or evidence counts instead of invented percentages.
+- Radar scores must be evidence-backed or clearly labeled as subjective; arbitrary self-ratings must not masquerade as objective capability.
+- Model and Identity visual status must remain traceable to supporting and contradictory evidence.
+- Visual summaries must support provenance drill-down.
+- Missed days must not create streak debt or punitive regression by default.
+
 ## Technical decisions
 
 - TS-001: hybrid graph node schema.
