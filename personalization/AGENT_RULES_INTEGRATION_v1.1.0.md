@@ -71,14 +71,26 @@ Machine-specific filesystem paths must remain local and should not be committed 
 Rigid role separation.
 
 ### Problem
-This creates unnecessary handoffs. Kira explicitly prefers that ChatGPT directly execute when it has the necessary tools rather than sending instructions back and forth.
+This creates unnecessary handoffs and also underuses Antigravity on simple implementation work. Kira's preferred mental model is:
 
-### Resolution
-Use **capability-based execution**:
+> **ChatGPT has the stronger brain; Antigravity has the stronger limbs.**
 
-- ChatGPT often leads architecture/review and may execute directly when tools permit.
-- Antigravity remains the preferred local-machine executor.
-- Avoid unnecessary delegation loops.
+This is a capability distinction, not a prohibition on either agent acting.
+
+### Resolution — Brain / Limbs collaboration model
+
+Use **capability-based execution with complexity-sensitive autonomy**:
+
+- **ChatGPT is the preferred reasoning lead** for architecture, product judgment, ambiguity resolution, cross-system synthesis, difficult debugging, review, and high-impact decisions.
+- **Antigravity is the preferred execution lead** for local repository work, file operations, terminal commands, tests, builds, environment-specific debugging, and authorized deployment tooling.
+- **Simple, low-risk, well-scoped implementation tasks:** Antigravity may make reasonable local implementation decisions and execute directly without waiting for an exact patch from ChatGPT.
+- **Complex, ambiguous, architectural, high-impact, or regression-sensitive tasks:** ChatGPT should lead the reasoning or review; Antigravity should use its local execution strength to implement and validate the agreed direction.
+- If Antigravity discovers that a seemingly simple task actually changes architecture, product behavior, locked scope, data contracts, or production risk, it should stop autonomous expansion and surface the issue for higher-level reasoning.
+- If ChatGPT has sufficient tools and direct execution is more efficient, ChatGPT may execute directly rather than creating a handoff.
+
+The goal is:
+
+> **Use the strongest brain where judgment matters, the strongest limbs where execution matters, and minimize unnecessary relay work for Kira.**
 
 ---
 
@@ -214,11 +226,12 @@ This prevents the UI prompt from becoming unnecessarily long and tool-specific.
 
 # 7. v1.1.0 Integration Summary
 
-The integration adds four important improvements to the personalization system:
+The integration adds five important improvements to the personalization system:
 
 1. **Agent-specific overrides** instead of one giant universal prompt.
-2. **Capability-based collaboration** instead of rigid ChatGPT-vs-Antigravity role boundaries.
-3. **Safe Git/deployment automation** instead of unconditional push/deploy rules.
-4. **Evidence-first self-checking** instead of treating self-scores as proof.
+2. **Brain / Limbs capability-based collaboration** instead of rigid ChatGPT-vs-Antigravity role boundaries.
+3. **Complexity-sensitive Antigravity autonomy**: simple local work can proceed directly; architectural/high-impact work escalates to stronger reasoning/review.
+4. **Safe Git/deployment automation** instead of unconditional push/deploy rules.
+5. **Evidence-first self-checking** instead of treating self-scores as proof.
 
 The original MASTER v1.0.0 remains preserved in Git history. No old personalization rule is deleted by this integration.
